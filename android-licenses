@@ -1,0 +1,12 @@
+Doctor summary (to see all details, run flutter doctor -v):
+[✓] Flutter (Channel stable, 3.22.2, on macOS 14.5 23F79 darwin-arm64, locale es-PY)
+[✓] Android toolchain - develop for Android devices (Android SDK version 35.0.0)
+[✓] Xcode - develop for iOS and macOS (Xcode 15.4)
+[✗] Chrome - develop for the web (Cannot find Chrome executable at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome)
+    ! Cannot find Chrome. Try setting CHROME_EXECUTABLE to a Chrome executable.
+[✓] Android Studio (version 2024.1)
+[✓] VS Code (version 1.91.1)
+[✓] Connected device (3 available)
+[✓] Network resources
+
+! Doctor found issues in 1 category.
