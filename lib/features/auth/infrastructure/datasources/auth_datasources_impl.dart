@@ -13,7 +13,6 @@ class AuthDatasourcesImpl extends AuthDataSource {
     try {
       final response = await dio.get('/auth/check-status',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
-
       final user = UserMapper.userJsonToEntity(response.data);
       return user;
     } on DioException catch (e) {
