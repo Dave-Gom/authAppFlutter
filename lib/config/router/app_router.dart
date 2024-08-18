@@ -37,16 +37,13 @@ final goRouterProvider = Provider(
       redirect: (context, state) {
         final isGoingTo = state.subloc;
         final authStatus = goRouterNotifier.authStatus;
-        if (isGoingTo == '/checkOut' && authStatus == AuthStatus.checking) {
-          return null;
+
+        if (authStatus == AuthStatus.notAuthenticated) {
+          return '/login';
         }
 
-        if (authStatus == AuthStatus.authenticated) {
-          if (isGoingTo == '/login' || isGoingTo == '/register') {
-            return null;
-          } else {
-            return '/login';
-          }
+        if (isGoingTo == '/checkOut' && authStatus == AuthStatus.checking) {
+          return null;
         }
 
         if (authStatus == AuthStatus.authenticated) {
