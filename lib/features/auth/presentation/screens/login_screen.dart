@@ -87,12 +87,13 @@ class _LoginForm extends ConsumerWidget {
           ),
           const SizedBox(height: 30),
           CustomTextFormField(
-            label: 'Contraseña',
-            obscureText: true,
-            errorMessage:
-                loginForm.isPosted ? loginForm.password.errorMessage : null,
-            onChanged: ref.read(loginFormProvider.notifier).onPasswordChange,
-          ),
+              label: 'Contraseña',
+              obscureText: true,
+              errorMessage:
+                  loginForm.isPosted ? loginForm.password.errorMessage : null,
+              onChanged: ref.read(loginFormProvider.notifier).onPasswordChange,
+              onFieldSubmited: (_) =>
+                  ref.read(loginFormProvider.notifier).onFormSubmit()),
           const SizedBox(height: 30),
           SizedBox(
               width: double.infinity,
