@@ -43,6 +43,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final token = await keyValueStorageService.getValue<String>('token');
 
       if (token == null) {
+        print("El token es null");
         return logout();
       }
 

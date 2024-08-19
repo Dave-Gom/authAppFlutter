@@ -33,11 +33,16 @@ final goRouterProvider = Provider(
           path: '/',
           builder: (context, state) => const ProductsScreen(),
         ),
+        GoRoute(
+          path: '/product/:id',
+          builder: (context, state) => ProductScreen(
+            productId: state.params['id'] ?? 'no-id',
+          ),
+        ),
       ],
       redirect: (context, state) {
         final isGoingTo = state.subloc;
         final authStatus = goRouterNotifier.authStatus;
-
         if (authStatus == AuthStatus.notAuthenticated) {
           return '/login';
         }
