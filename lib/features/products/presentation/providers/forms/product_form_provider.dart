@@ -2,17 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:teslo_shop/config/constants/environment/environment.dart';
 import 'package:teslo_shop/features/products/domain/entities/product.dart';
+import 'package:teslo_shop/features/products/presentation/providers/providers.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 final productFormProvider = StateNotifierProvider.autoDispose
     .family<ProductFormNotifier, ProductFormState, Product>((ref, product) {
-  return ProductFormNotifier(product: product);
+  final createUpdateCallback =
+      ref.watch(productsProvider.notifier).createOrUpdateProduct;
+  return ProductFormNotifier(
+      product: product, onSubmitCallback: createUpdateCallback);
 });
 
 class ProductFormNotifier extends StateNotifier<ProductFormState> {
-  final void Function(Map<String, dynamic> productLike)? onSUbmitCallback;
+  final Future<bool> Function(Map<String, dynamic> productLike)?
+      onSubmitCallback;
 
-  ProductFormNotifier({this.onSUbmitCallback, required Product product})
+  ProductFormNotifier({this.onSubmitCallback, required Product product})
       : super(ProductFormState(
           id: product.id,
           title: Title.dirty(product.title),
@@ -30,26 +35,31 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
   Future<bool> onFormSubmit() async {
     _touchEverything();
 
-    if (onSUbmitCallback == null) return false;
+    if (onSubmitCallback == null) return false;
 
     final productLike = {
-      'isFormValid': state.isFormValid,
       'id': state.id,
-      'slug': state.slug,
-      'price': state.price,
-      'title': state.title,
+      'slug': state.slug.value,
+      'price': state.price.value,
+      'title': state.title.value,
       'sizes': state.sizes,
       'gender': state.gender,
-      'inStock': state.inStock,
+      'stock': state.inStock.value,
       'description': state.description,
       'tags': state.tags.split(','),
       'images': state.images
           .map((image) =>
-              image.replaceAll('${Environment.apiUrl}/files/product', ''))
+              image.replaceAll('${Environment.apiUrl}/files/product/', ''))
           .toList(),
     };
 
-    return true;
+    print(productLike);
+
+    try {
+      return onSubmitCallback!(productLike);
+    } catch (e) {
+      return false;
+    }
   }
 
   void _touchEverything() {
@@ -83,7 +93,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
         ]));
   }
 
-  void onPriceeChanged(double value) {
+  void onPriceChanged(double value) {
     state = state.copyWith(
         price: Price.dirty(value),
         isFormValid: Formz.validate([
@@ -113,8 +123,12 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
     state = state.copyWith(gender: gender);
   }
 
-  void onTagsChanged(String gender) {
-    state = state.copyWith(gender: gender);
+  void onTagsChanged(String tags) {
+    state = state.copyWith(tags: tags);
+  }
+
+  void onDescriptionChanged(String description) {
+    state = state.copyWith(description: description);
   }
 }
 
