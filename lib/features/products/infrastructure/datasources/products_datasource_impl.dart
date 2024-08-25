@@ -18,7 +18,8 @@ class ProductsDatasourceImpl extends ProductsDatasource {
     try {
       final String? productId = productLike['id'];
       final String method = productId == null ? "POST" : "PATCH";
-      final String url = (productId == null) ? '/post' : '/products/$productId';
+      final String url =
+          (productId == null) ? '/products' : '/products/$productId';
 
       productLike.remove('id');
 
@@ -29,7 +30,6 @@ class ProductsDatasourceImpl extends ProductsDatasource {
 
       return product;
     } catch (e) {
-      print(e);
       throw Exception();
     }
   }
